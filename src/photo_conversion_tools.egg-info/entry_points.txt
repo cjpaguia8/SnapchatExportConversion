@@ -1,0 +1,5 @@
+[console_scripts]
+photo-conversion-gui = photo_conversion.gui:main
+photo-convert = photo_conversion.convert:main
+photo-tools = photo_conversion.cli:main
+snapchat-unzip = photo_conversion.snapchat:main
