@@ -2,7 +2,7 @@
 
 A friendly desktop application for recovering exported Snapchat memories and
 converting otherwise awkward media files into standard JPEGs. No terminal commands
-or separate FFmpeg installation are required when using the Windows release.
+or separate FFmpeg installation are required when using a desktop release.
 
 ## Easiest way to run it on Windows
 
@@ -20,6 +20,24 @@ result and provides buttons that open the output folders.
 Windows may show a SmartScreen warning for an unsigned community application. If
 you downloaded it from this repository's official Releases page, choose **More
 info**, verify the application name, and select **Run anyway**.
+
+## Easiest way to run it on macOS
+
+The packaged macOS application supports macOS 15 or newer. Download the file that
+matches your Mac:
+
+- Apple Silicon (M1, M2, M3, M4, or newer):
+  `MemoryExportConverter-macOS-arm64.zip`
+- Intel processor: `MemoryExportConverter-macOS-x86_64.zip`
+
+Extract the ZIP, then drag **Memory Export Converter.app** into **Applications**.
+Because the initial macOS releases use free ad-hoc signing rather than a paid
+Apple Developer ID, Gatekeeper may block the first launch. Control-click the app,
+choose **Open**, and confirm **Open**. If that option is unavailable, try opening
+the app once and then use **System Settings > Privacy & Security > Open Anyway**.
+
+The macOS release supplies FFmpeg and does not require Python or a separate FFmpeg
+installation.
 
 ## What it does
 
@@ -51,6 +69,24 @@ After installation, `RunMemoryExportConverter.pyw` can also be double-clicked
 on Windows.
 On macOS or Linux, activate the environment with `source .venv/bin/activate`.
 
+## Verify a release download
+
+Each packaged download has a matching SHA-256 file. On macOS, verify the ZIP with:
+
+```bash
+shasum -a 256 MemoryExportConverter-macOS-arm64.zip
+cat MemoryExportConverter-macOS-arm64.sha256
+```
+
+The two hashes must match. Replace `arm64` with `x86_64` when verifying the Intel
+download. With GitHub CLI installed, you can also verify that GitHub Actions built
+the archive from this repository:
+
+```bash
+gh attestation verify MemoryExportConverter-macOS-arm64.zip \
+  --repo cjpaguia8/MemoryExportConverter
+```
+
 ## Command-line usage
 
 The original commands remain available for scripting and advanced users.
@@ -81,9 +117,17 @@ python -m build
 pyinstaller --clean --noconfirm MemoryExportConverter.spec
 ```
 
-The Windows executable is written to `dist/MemoryExportConverter.exe`. Pushing
-a version tag such as `v1.1.0` runs the included GitHub Actions workflow and
-attaches the executable to the corresponding release.
+The Windows executable is written to `dist/MemoryExportConverter.exe`. On macOS,
+build the application bundle with:
+
+```bash
+pyinstaller --clean --noconfirm MemoryExportConverter-macOS.spec
+```
+
+Pushing a version tag such as `v1.2.0` runs the Windows and macOS GitHub Actions
+workflows. The corresponding release receives the Windows executable plus native
+macOS ZIPs for Apple Silicon and Intel, together with checksums and build
+attestations.
 
 ## Project layout
 
@@ -93,6 +137,7 @@ MemoryExportConverter/
 |-- tests/                  # Automated tests
 |-- RunMemoryExportConverter.pyw # Double-click source launcher
 |-- MemoryExportConverter.spec   # Standalone Windows build configuration
+|-- MemoryExportConverter-macOS.spec # macOS application bundle configuration
 |-- pyproject.toml          # Dependencies, commands, and tool configuration
 `-- README.md
 ```

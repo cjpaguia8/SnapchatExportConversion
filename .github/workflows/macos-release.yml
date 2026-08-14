@@ -1,0 +1,79 @@
+name: Build macOS applications
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build-macos:
+    name: Build macOS (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-15
+          - arch: x86_64
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
+    env:
+      ARCHIVE_NAME: MemoryExportConverter-macOS-${{ matrix.arch }}.zip
+      CHECKSUM_NAME: MemoryExportConverter-macOS-${{ matrix.arch }}.sha256
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install project and build tools
+        run: python -m pip install -e ".[dev,gui-build]"
+      - name: Run automated checks
+        run: |
+          python -c "import tkinter"
+          python -m pytest
+          python -m ruff check .
+          python -m ruff format --check .
+      - name: Build native application bundle
+        run: python -m PyInstaller --clean --noconfirm MemoryExportConverter-macOS.spec
+      - name: Package application and generate checksum
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            "dist/Memory Export Converter.app" "dist/${ARCHIVE_NAME}"
+          hash=$(shasum -a 256 "dist/${ARCHIVE_NAME}" | awk '{print $1}')
+          printf '%s  %s\n' "$hash" "$ARCHIVE_NAME" > "dist/${CHECKSUM_NAME}"
+      - name: Attest build provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/${{ env.ARCHIVE_NAME }}
+      - name: Upload macOS build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: MemoryExportConverter-macOS-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/${{ env.ARCHIVE_NAME }}
+            dist/${{ env.CHECKSUM_NAME }}
+
+  publish-macos:
+    name: Attach macOS applications to release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build-macos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download macOS build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: MemoryExportConverter-macOS-*
+          path: release-assets
+          merge-multiple: true
+      - name: Attach macOS applications to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*

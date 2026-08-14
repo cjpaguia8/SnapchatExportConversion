@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import os
 import queue
+import subprocess
+import sys
 import tempfile
 import threading
 import tkinter as tk
@@ -36,6 +38,19 @@ class RunResult:
     @property
     def failures(self) -> int:
         return self.conversion_failures + self.archive_failures
+
+
+def open_directory(path: Path) -> None:
+    """Open a directory in the current platform's file manager."""
+    if sys.platform == "win32":
+        startfile = getattr(os, "startfile", None)
+        if startfile is None:
+            raise OSError("Windows folder opening is unavailable.")
+        startfile(path)
+    elif sys.platform == "darwin":
+        subprocess.Popen(["/usr/bin/open", str(path)])
+    else:
+        subprocess.Popen(["xdg-open", str(path)])
 
 
 def validate_selections(
@@ -283,7 +298,10 @@ class MemoryExportConverterApp:
     def _open_selected(self, key: str) -> None:
         path = self.variables[key].get()
         if path and Path(path).is_dir():
-            os.startfile(path)  # type: ignore[attr-defined]
+            try:
+                open_directory(Path(path))
+            except OSError as exc:
+                messagebox.showerror("Could not open output folder", str(exc))
 
 
 def main() -> int:
