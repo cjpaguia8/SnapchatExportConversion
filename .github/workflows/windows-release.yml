@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   build-windows:
@@ -27,12 +29,25 @@ jobs:
           python -m ruff format --check .
       - name: Build standalone application
         run: pyinstaller --clean --noconfirm SnapchatExportConversion.spec
+      - name: Generate SHA-256 checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash dist/SnapchatExportConversion.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  SnapchatExportConversion.exe" | Set-Content -Encoding ascii dist/SHA256SUMS.txt
+      - name: Attest build provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/SnapchatExportConversion.exe
       - uses: actions/upload-artifact@v4
         with:
           name: SnapchatExportConversion-Windows
-          path: dist/SnapchatExportConversion.exe
+          path: |
+            dist/SnapchatExportConversion.exe
+            dist/SHA256SUMS.txt
       - name: Attach application to GitHub release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/SnapchatExportConversion.exe
+          files: |
+            dist/SnapchatExportConversion.exe
+            dist/SHA256SUMS.txt
