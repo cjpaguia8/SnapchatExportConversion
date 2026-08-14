@@ -1,4 +1,4 @@
-# Snapchat Export Conversion
+# Memory Export Converter
 
 A friendly desktop application for recovering exported Snapchat memories and
 converting otherwise awkward media files into standard JPEGs. No terminal commands
@@ -7,7 +7,7 @@ or separate FFmpeg installation are required when using the Windows release.
 ## Easiest way to run it on Windows
 
 1. Open the repository's **Releases** page on GitHub.
-2. Download `SnapchatExportConversion.exe` from the newest release.
+2. Download `MemoryExportConverter.exe` from the newest release.
 3. Double-click the downloaded application.
 4. Select either a raw-media folder, a Snapchat ZIP folder, or both.
 5. Select where the converted photos and merged Snapchat media should be saved.
@@ -39,15 +39,15 @@ Python 3.9 or newer is required:
 
 ```powershell
 git clone <repository-url>
-cd SnapchatExportConversion
+cd MemoryExportConverter
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -e .
-snapchat-export-conversion-gui
+memory-export-converter-gui
 ```
 
-After installation, `RunSnapchatExportConversion.pyw` can also be double-clicked
+After installation, `RunMemoryExportConverter.pyw` can also be double-clicked
 on Windows.
 On macOS or Linux, activate the environment with `source .venv/bin/activate`.
 
@@ -58,16 +58,16 @@ The original commands remain available for scripting and advanced users.
 Convert a directory to JPEG:
 
 ```powershell
-snapchat-convert --source-dir "C:\path\to\input" --output-dir "C:\path\to\output"
+memory-convert --source-dir "C:\path\to\input" --output-dir "C:\path\to\output"
 ```
 
 Extract Snapchat exports and merge their overlays:
 
 ```powershell
-snapchat-unzip --source-dir "C:\path\to\zips" --extract-dir "C:\path\to\extracted" --merged-img-dir "C:\path\to\results"
+memory-unzip --source-dir "C:\path\to\zips" --extract-dir "C:\path\to\extracted" --merged-img-dir "C:\path\to\results"
 ```
 
-`python SnapchatExportConversion.py` and `python BatchUnzipper.py` are also
+`python MemoryExportConverter.py` and `python BatchUnzipper.py` are also
 available as launchers. Run either command with `--help` for all options.
 
 ## Development and packaging
@@ -78,21 +78,21 @@ python -m pytest
 python -m ruff check .
 python -m ruff format --check .
 python -m build
-pyinstaller --clean --noconfirm SnapchatExportConversion.spec
+pyinstaller --clean --noconfirm MemoryExportConverter.spec
 ```
 
-The Windows executable is written to `dist/SnapchatExportConversion.exe`. Pushing
+The Windows executable is written to `dist/MemoryExportConverter.exe`. Pushing
 a version tag such as `v1.1.0` runs the included GitHub Actions workflow and
 attaches the executable to the corresponding release.
 
 ## Project layout
 
 ```text
-SnapchatExportConversion/
-|-- src/snapchat_export_conversion/ # Conversion engine, CLI, and desktop GUI
+MemoryExportConverter/
+|-- src/memory_export_converter/ # Conversion engine, CLI, and desktop GUI
 |-- tests/                  # Automated tests
-|-- RunSnapchatExportConversion.pyw # Double-click source launcher
-|-- SnapchatExportConversion.spec   # Standalone Windows build configuration
+|-- RunMemoryExportConverter.pyw # Double-click source launcher
+|-- MemoryExportConverter.spec   # Standalone Windows build configuration
 |-- pyproject.toml          # Dependencies, commands, and tool configuration
 `-- README.md
 ```
@@ -100,3 +100,12 @@ SnapchatExportConversion/
 Keep personal exports and generated media outside the repository. Common local
 input/output directories, virtual environments, caches, IDE files, and builds are
 ignored by Git.
+
+## License and trademark notice
+
+This project is open-source software licensed under the [MIT License](LICENSE).
+
+This is an independent, unofficial project. It is not affiliated with, endorsed
+by, sponsored by, or otherwise associated with Snap Inc. or Snapchat. Snapchat is
+a trademark of Snap Inc. This project's use of the name is solely an informational
+reference to describe compatibility with user-provided Snapchat export files.

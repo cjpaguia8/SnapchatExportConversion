@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from snapchat_export_conversion.convert import convert_files
+from memory_export_converter.convert import convert_files
 
 
 def test_convert_files_builds_ffmpeg_command(tmp_path: Path) -> None:
@@ -14,11 +14,11 @@ def test_convert_files_builds_ffmpeg_command(tmp_path: Path) -> None:
 
     with (
         patch(
-            "snapchat_export_conversion.convert.get_ffmpeg_executable",
+            "memory_export_converter.convert.get_ffmpeg_executable",
             return_value="ffmpeg",
         ),
         patch(
-            "snapchat_export_conversion.convert.subprocess.run",
+            "memory_export_converter.convert.subprocess.run",
             return_value=Mock(returncode=0),
         ) as run,
     ):

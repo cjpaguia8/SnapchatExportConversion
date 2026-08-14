@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from snapchat_export_conversion.gui import (
+from memory_export_converter.gui import (
     RunRequest,
     conflicting_outputs,
     validate_selections,

@@ -3,10 +3,11 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "snapchat-export-conversion"
+name = "memory-export-converter"
 version = "1.1.0"
 description = "Command-line tools for converting media and recovering Snapchat memory exports"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.9"
 dependencies = ["imageio-ffmpeg>=0.5", "Pillow>=10.0"]
 classifiers = [
@@ -22,10 +23,10 @@ dev = ["build>=1.2", "pytest>=8.0", "ruff>=0.9"]
 gui-build = ["pyinstaller>=6.0"]
 
 [project.scripts]
-snapchat-convert = "snapchat_export_conversion.convert:main"
-snapchat-unzip = "snapchat_export_conversion.snapchat:main"
-snapchat-export-conversion = "snapchat_export_conversion.cli:main"
-snapchat-export-conversion-gui = "snapchat_export_conversion.gui:main"
+memory-convert = "memory_export_converter.convert:main"
+memory-unzip = "memory_export_converter.snapchat:main"
+memory-export-converter = "memory_export_converter.cli:main"
+memory-export-converter-gui = "memory_export_converter.gui:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

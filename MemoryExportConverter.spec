@@ -5,7 +5,7 @@ from PyInstaller.utils.hooks import collect_data_files
 datas = collect_data_files("imageio_ffmpeg")
 
 analysis = Analysis(
-    ["RunSnapchatExportConversion.pyw"],
+    ["RunMemoryExportConverter.pyw"],
     pathex=["src"],
     binaries=[],
     datas=datas,
@@ -24,7 +24,7 @@ executable = EXE(
     analysis.binaries,
     analysis.datas,
     [],
-    name="SnapchatExportConversion",
+    name="MemoryExportConverter",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from collections.abc import Sequence
 
-from snapchat_export_conversion import convert, snapchat
+from memory_export_converter import convert, snapchat
 
 
 def main(argv: Sequence[str] | None = None) -> int:

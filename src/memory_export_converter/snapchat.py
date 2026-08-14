@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Callable
 
-from snapchat_export_conversion.ffmpeg import get_ffmpeg_executable
+from memory_export_converter.ffmpeg import get_ffmpeg_executable
 
 ProgressCallback = Callable[[str], None]
 

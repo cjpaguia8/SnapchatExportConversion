@@ -12,8 +12,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
-from snapchat_export_conversion.convert import ConversionSummary, convert_files
-from snapchat_export_conversion.snapchat import batch_unzip
+from memory_export_converter.convert import ConversionSummary, convert_files
+from memory_export_converter.snapchat import batch_unzip
 
 
 @dataclass(frozen=True)
@@ -95,7 +95,7 @@ def run_request(request: RunRequest, progress: Callable[[str], None]) -> RunResu
         progress("Extracting and merging Snapchat archives...")
         archive_count = len(tuple(request.zip_input.glob("*.zip")))
         with tempfile.TemporaryDirectory(
-            prefix="snapchat-export-conversion-"
+            prefix="memory-export-converter-"
         ) as temporary:
             archive_failures = batch_unzip(
                 request.zip_input,
@@ -111,12 +111,12 @@ def run_request(request: RunRequest, progress: Callable[[str], None]) -> RunResu
     )
 
 
-class SnapchatExportConversionApp:
+class MemoryExportConverterApp:
     """Tkinter application for selecting folders and running conversions."""
 
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
-        self.root.title("Snapchat Export Conversion")
+        self.root.title("Memory Export Converter")
         self.root.geometry("760x520")
         self.root.minsize(680, 480)
         self.events: queue.Queue[tuple[str, object]] = queue.Queue()
@@ -133,7 +133,7 @@ class SnapchatExportConversionApp:
         outer.pack(fill="both", expand=True)
         ttk.Label(
             outer,
-            text="Snapchat Export Conversion",
+            text="Memory Export Converter",
             font=("Segoe UI", 18, "bold"),
         ).pack(anchor="w")
         ttk.Label(
@@ -288,6 +288,6 @@ class SnapchatExportConversionApp:
 
 def main() -> int:
     root = tk.Tk()
-    SnapchatExportConversionApp(root)
+    MemoryExportConverterApp(root)
     root.mainloop()
     return 0

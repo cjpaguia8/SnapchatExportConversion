@@ -1,4 +1,4 @@
-from snapchat_export_conversion.cli import main
+from memory_export_converter.cli import main
 
 if __name__ == "__main__":
     raise SystemExit(main())
