@@ -42,6 +42,7 @@ git clone <repository-url>
 cd PhotoConversion
 python -m venv .venv
 .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 python -m pip install -e .
 photo-conversion-gui
 ```
