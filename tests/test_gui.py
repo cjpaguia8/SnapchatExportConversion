@@ -2,7 +2,11 @@ from pathlib import Path
 
 import pytest
 
-from photo_conversion.gui import RunRequest, conflicting_outputs, validate_selections
+from snapchat_export_conversion.gui import (
+    RunRequest,
+    conflicting_outputs,
+    validate_selections,
+)
 
 
 def test_validate_raw_media_only(tmp_path: Path) -> None:

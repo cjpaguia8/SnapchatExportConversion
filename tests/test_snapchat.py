@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from photo_conversion.snapchat import find_media, overlay_images, safe_extract
+from snapchat_export_conversion.snapchat import find_media, overlay_images, safe_extract
 
 
 def test_overlay_images(tmp_path: Path) -> None:

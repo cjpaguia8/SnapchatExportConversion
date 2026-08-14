@@ -10,7 +10,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable
 
-from photo_conversion.ffmpeg import get_ffmpeg_executable
+from snapchat_export_conversion.ffmpeg import get_ffmpeg_executable
 
 ProgressCallback = Callable[[str], None]
 
