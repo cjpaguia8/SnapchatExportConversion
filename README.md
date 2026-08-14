@@ -13,9 +13,9 @@ or separate FFmpeg installation are required when using the Windows release.
 5. Select where the converted photos and merged Snapchat media should be saved.
 6. Click **Run Conversion**.
 
-Use **Browse** to select an existing location or **New Folder** to create an output
-folder. When processing finishes, the application reports the result and provides
-buttons that open the output folders.
+Use **Browse** to select a location; you can create a new output folder from the
+folder selection window. When processing finishes, the application reports the
+result and provides buttons that open the output folders.
 
 Windows may show a SmartScreen warning for an unsigned community application. If
 you downloaded it from this repository's official Releases page, choose **More

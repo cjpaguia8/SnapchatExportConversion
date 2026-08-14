@@ -10,7 +10,7 @@ import tkinter as tk
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from tkinter import filedialog, messagebox, simpledialog, ttk
+from tkinter import filedialog, messagebox, ttk
 
 from snapchat_export_conversion.convert import ConversionSummary, convert_files
 from snapchat_export_conversion.snapchat import batch_unzip
@@ -145,11 +145,11 @@ class SnapchatExportConversionApp:
 
         form = ttk.Frame(outer)
         form.pack(fill="x")
-        self._folder_row(form, 0, "Raw photos or media", "media_input", output=False)
-        self._folder_row(form, 1, "Snapchat ZIP archives", "zip_input", output=False)
-        ttk.Separator(form).grid(row=2, column=0, columnspan=4, sticky="ew", pady=14)
-        self._folder_row(form, 3, "Converted photos", "photo_output", output=True)
-        self._folder_row(form, 4, "Merged Snapchat media", "merged_output", output=True)
+        self._folder_row(form, 0, "Raw photos or media", "media_input")
+        self._folder_row(form, 1, "Snapchat ZIP archives", "zip_input")
+        ttk.Separator(form).grid(row=2, column=0, columnspan=3, sticky="ew", pady=14)
+        self._folder_row(form, 3, "Converted photos", "photo_output")
+        self._folder_row(form, 4, "Merged Snapchat media", "merged_output")
         form.columnconfigure(1, weight=1)
 
         self.run_button = ttk.Button(outer, text="Run Conversion", command=self.start)
@@ -180,8 +180,6 @@ class SnapchatExportConversionApp:
         row: int,
         label: str,
         key: str,
-        *,
-        output: bool,
     ) -> None:
         ttk.Label(parent, text=label).grid(row=row, column=0, sticky="w", pady=6)
         ttk.Entry(parent, textvariable=self.variables[key]).grid(
@@ -190,35 +188,12 @@ class SnapchatExportConversionApp:
         ttk.Button(parent, text="Browse...", command=lambda: self._browse(key)).grid(
             row=row, column=2, pady=6
         )
-        if output:
-            ttk.Button(
-                parent, text="New Folder...", command=lambda: self._new_folder(key)
-            ).grid(row=row, column=3, padx=(8, 0), pady=6)
-
     def _browse(self, key: str) -> None:
         selected = filedialog.askdirectory(
             title="Select folder", initialdir=self.variables[key].get() or None
         )
         if selected:
             self.variables[key].set(selected)
-
-    def _new_folder(self, key: str) -> None:
-        parent = filedialog.askdirectory(title="Choose the parent folder")
-        if not parent:
-            return
-        name = simpledialog.askstring("New Folder", "Enter the new folder name:")
-        if not name:
-            return
-        if Path(name).name != name or name in {".", ".."}:
-            messagebox.showerror("Invalid name", "Enter a single folder name.")
-            return
-        destination = Path(parent) / name
-        try:
-            destination.mkdir()
-        except OSError as exc:
-            messagebox.showerror("Could not create folder", str(exc))
-            return
-        self.variables[key].set(str(destination))
 
     def start(self) -> None:
         try:
