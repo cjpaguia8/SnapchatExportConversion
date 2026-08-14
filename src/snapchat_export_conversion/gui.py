@@ -188,6 +188,7 @@ class SnapchatExportConversionApp:
         ttk.Button(parent, text="Browse...", command=lambda: self._browse(key)).grid(
             row=row, column=2, pady=6
         )
+
     def _browse(self, key: str) -> None:
         selected = filedialog.askdirectory(
             title="Select folder", initialdir=self.variables[key].get() or None
